@@ -1,2 +1,2 @@
-# matching-starter
+# matching
 基基于 JDK 17 Vector API + Agrona 无锁队列 + Disruptor 异步事件驱动架构的高性能匹配引擎，支持百万级并发请求实时处理，广泛适用于大型对战游戏、社交推荐、即时组队等场景。通过批量向量化计算、无 GC 通信链路和事件驱动模型，实现 23K QPS、P99 延迟低于 30ms 的性能表现。
