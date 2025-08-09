@@ -1,53 +1,54 @@
-🧭 Usage Guide: High-Performance Matchmaking System Deployment & Stress Test
+🧭 **Usage Guide: High-Performance Matchmaking System Deployment & Stress Test**
 
-Step 1: Project Overview
+### Step 1: Project Overview
+
 This project is a high-performance matchmaking system built on Java Vector API, Agrona lock-free queues, and Disruptor. It is designed for high concurrency matchmaking and push-type applications such as competitive games, instant team formation, and social recommendations.
 
-1️⃣ WebSocket Server Details
-Default listening port: 8889
+---
 
-Endpoint path: /ws
+### 1️⃣ WebSocket Server Details
 
-Protocol: WebSocket bidirectional persistent connection
+- **Default listening port:** 8889
+- **Endpoint path:** `/ws`
+- **Protocol:** WebSocket bidirectional persistent connection
 
-2️⃣ Core Classes Description
-EnhancedMatchEngine
+---
+
+### 2️⃣ Core Classes Description
+
+**EnhancedMatchEngine**
+
 High-performance matchmaking engine responsible for batch request processing core logic.
 
-✅ Implements lock-free queue using Agrona's ManyToOneConcurrentArrayQueue
+- ✅ Implements lock-free queue using Agrona's `ManyToOneConcurrentArrayQueue`
+- ✅ Uses Reactor's `Flux.parallel()` to handle bucketed requests concurrently
+- ✅ Supports queue length and old-gen GC threshold based flow control
+- ✅ Uses `drainTo` for in-place scanning, minimizing intermediate object creation
+- ✅ Scheduling matching tasks via `scheduleWithFixedDelay`
 
-✅ Uses Reactor's Flux.parallel() to handle bucketed requests concurrently
+**VectorizedMatchPipeline**
 
-✅ Supports queue length and old-gen GC threshold based flow control
-
-✅ Uses drainTo for in-place scanning, minimizing intermediate object creation
-
-✅ Scheduling matching tasks via scheduleWithFixedDelay
-
-VectorizedMatchPipeline
 Batch vectorized matching logic leveraging JDK 17 Vector API.
 
-✅ Processes matching logic using SIMD instruction sets
+- ✅ Processes matching logic using SIMD instruction sets
+- ✅ Replaces traditional looping with vector operations to improve throughput
+- ✅ Uses `IntVector` and `FloatVector` types for precision matching
 
-✅ Replaces traditional looping with vector operations to improve throughput
+**DisruptorNotificationService**
 
-✅ Uses IntVector and FloatVector types for precision matching
-
-DisruptorNotificationService
 Message notification module based on Disruptor asynchronous push system.
 
-✅ High-performance RingBuffer channel implementing producer-consumer async communication
+- ✅ High-performance RingBuffer channel implementing producer-consumer async communication
+- ✅ Single consumer thread model to avoid context switches and blocking
+- ✅ Supports message persistence, tracking, and retry mechanisms to ensure reliability
 
-✅ Single consumer thread model to avoid context switches and blocking
+---
 
-✅ Supports message persistence, tracking, and retry mechanisms to ensure reliability
+### Step 2: Stress Test Outline
 
-Step 2: Stress Test Outline
-🧱 1. Packaging and Running Command
+🧱 **1. Packaging and Running Command**
 
-bash
-复制
-编辑
+```bash
 java \
   --add-exports=java.base/jdk.internal.vm.annotation=ALL-UNNAMED \
   --add-modules=jdk.incubator.vector \
@@ -66,38 +67,38 @@ java \
   -XX:-UseCompressedClassPointers \
   -XX:ReservedCodeCacheSize=1024M \
   -jar match-1.jar
-Parameter explanations:
 
---enable-preview + --add-modules: Enable JDK Vector API experimental module
+```
 
--XX:+UseParallelGC: Use parallel garbage collector for throughput pressure
+**Parameter explanations:**
 
--XX:+AlwaysPreTouch: Pre-warm memory pages at startup to reduce first latency
+- `-enable-preview` + `-add-modules`: Enable JDK Vector API experimental module
+- `XX:+UseParallelGC`: Use parallel garbage collector for throughput pressure
+- `XX:+AlwaysPreTouch`: Pre-warm memory pages at startup to reduce first latency
+- `XX:+UseNUMA`: Optimize distributed memory on multi-core architectures
+- `XX:MaxRAMPercentage=80`: Set max RAM usage limit
+- `XX:+PerfDisableSharedMem`: Disable perf shared memory to avoid monitoring interference
+- `XX:ReservedCodeCacheSize=1024M`: Increase JIT compilation buffer size
 
--XX:+UseNUMA: Optimize distributed memory on multi-core architectures
+---
 
--XX:MaxRAMPercentage=80: Set max RAM usage limit
+🧰 **2. Install K6 Tool (Linux)**
 
--XX:+PerfDisableSharedMem: Disable perf shared memory to avoid monitoring interference
-
--XX:ReservedCodeCacheSize=1024M: Increase JIT compilation buffer size
-
-🧰 2. Install K6 Tool (Linux)
-
-bash
-复制
-编辑
+```bash
 sudo apt update
 sudo apt install gnupg software-properties-common
 curl -s https://dl.k6.io/key.gpg | sudo apt-key add -
 echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
 sudo apt update
 sudo apt install k6
-🧪 3. Sample Test Script (WebSocket Stress Test)
 
-javascript
-复制
-编辑
+```
+
+---
+
+🧪 **3. Sample Test Script (WebSocket Stress Test)**
+
+```jsx
 import { WebSocket } from 'k6/experimental/websockets';
 import { check, sleep } from 'k6';
 import { randomIntBetween } from 'https://jslib.k6.io/k6-utils/1.2.0/index.js';
@@ -149,25 +150,34 @@ export default function () {
 
   sleep(options.duration);
 }
-📤 4. Sample Test Results (Second Round)
 
-Metric	Data
-Test Name	Second Round WebSocket Concurrency Match Test
-Concurrent Connections	3000
-Send Rate	1000 messages per 0.1s per VU
-Total Test Duration	4 minutes 44 seconds
-Total Messages Sent	761,394
-Total Server Processed	19,768,488
-Average Process per Request	≈ 26x
-Max Concurrent Connections	3000
-Average Connection Latency	1.05 seconds
-P90 Connection Latency	1.77 seconds
-P95 Connection Latency	1.92 seconds
-Max Connection Latency	4.29 seconds
-Message Send Rate	≈ 2677 messages/second
-Bandwidth Usage	≈ 5.5 MB/s
+```
 
-🧠 Closing Remarks: Evolve Toward Efficiency Based on Principles
-In building system architecture, decisions are made by people and success is determined by data. Every technical choice here is a proactive response to performance bottlenecks. This guide aims not only to help you run the project but also to deepen your understanding of why these optimizations matter.
+---
+
+📤 **4. Sample Test Results (Second Round)**
+
+| Metric | Data |
+| --- | --- |
+| Test Name | Second Round WebSocket Concurrency Match Test |
+| Concurrent Connections | 3000 |
+| Send Rate | 1000 messages per 0.1s per VU |
+| Total Test Duration | 4 minutes 44 seconds |
+| Total Messages Sent | 761,394 |
+| Total Server Processed | 19,768,488 |
+| Average Process per Request | ≈ 26x |
+| Max Concurrent Connections | 3000 |
+| Average Connection Latency | 1.05 seconds |
+| P90 Connection Latency | 1.77 seconds |
+| P95 Connection Latency | 1.92 seconds |
+| Max Connection Latency | 4.29 seconds |
+| Message Send Rate | ≈ 2677 messages/second |
+| Bandwidth Usage | ≈ 5.5 MB/s |
+
+---
+
+🧠 **Closing Remarks: Evolve Toward Efficiency Based on Principles**
+
+In building system architecture, decisions are made by people and success is determined by data. Every technical choice here is a proactive response to performance bottlenecks. This guide aims not only to help you run the project but also to deepen your understanding of *why* these optimizations matter.
 
 If you have questions or suggestions, feel free to open issues or start discussions.
