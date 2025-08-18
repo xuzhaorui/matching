@@ -1,0 +1,36 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: match-shard
+  profiles:
+    active: kafka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  tracing:
+    sampling:
+      probability: 1.0
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: kafka
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:9092}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: rocketmq
+  rocketmq:
+    name-server: ${ROCKETMQ_NAMESRV:localhost:9876}
