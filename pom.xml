@@ -18,14 +18,14 @@
     <description>High-concurrency user matching engine demo</description>
 
     <modules>
-        <module>matching</module>
+        <module>matching-core</module>
         <module>contracts</module>
-        <module>gateway-ws</module>
-        <module>match-shard</module>
-        <module>profile-service</module>
-        <module>allocator-service</module>
-        <module>notifier-service</module>
-        <module>audit-service</module>
+        <module>services/gateway-ws</module>
+        <module>services/match-shard</module>
+        <module>services/profile-service</module>
+        <module>services/allocator-service</module>
+        <module>services/notifier-service</module>
+        <module>services/audit-service</module>
         <module>infra</module>
         <module>bench</module>
     </modules>
@@ -35,6 +35,10 @@
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <spring.cloud.version>2023.0.1</spring.cloud.version>
         <grpc.version>1.62.2</grpc.version>
+        <micrometer.version>1.12.3</micrometer.version>
+        <otel.version>1.36.0</otel.version>
+        <kafka.version>3.6.1</kafka.version>
+        <rocketmq.version>2.3.1</rocketmq.version>
         <protobuf.version>3.25.3</protobuf.version>
     </properties>
 
@@ -46,6 +50,37 @@
                 <version>${spring.cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-bom</artifactId>
+                <version>${grpc.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-bom</artifactId>
+                <version>${micrometer.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.opentelemetry</groupId>
+                <artifactId>opentelemetry-bom</artifactId>
+                <version>${otel.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-clients</artifactId>
+                <version>${kafka.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-spring-boot-starter</artifactId>
+                <version>${rocketmq.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

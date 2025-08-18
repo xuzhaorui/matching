@@ -3,14 +3,14 @@
 A high concurrency user matching engine demonstration built with Java 17 and Spring Boot 3.3.
 
 ## Modules
-- `matching` - placeholder for future core modules.
+- `matching-core` - placeholder for future core modules.
 - `contracts` - gRPC definitions shared across services.
-- `gateway-ws` - WebSocket gateway exposing matching APIs.
-- `match-shard` - gRPC match shard service.
-- `profile-service` - user profile management.
-- `allocator-service` - shard allocation logic.
-- `notifier-service` - push notifications.
-- `audit-service` - audit log collector.
+- `services/gateway-ws` - WebSocket gateway exposing matching APIs.
+- `services/match-shard` - gRPC match shard service.
+- `services/profile-service` - user profile management.
+- `services/allocator-service` - shard allocation logic.
+- `services/notifier-service` - push notifications.
+- `services/audit-service` - audit log collector.
 - `infra` - Docker compose and monitoring configuration.
 - `bench` - k6 benchmark scripts.
 

@@ -29,38 +29,38 @@ services:
     ports:
       - "3000:3000"
   gateway-ws:
-    build: ../gateway-ws
+    build: ../services/gateway-ws
     ports:
       - "8080:8080"
     depends_on:
       - kafka
   match-shard:
-    build: ../match-shard
+    build: ../services/match-shard
     ports:
       - "8081:8081"
       - "9090:9090"
     depends_on:
       - kafka
   profile-service:
-    build: ../profile-service
+    build: ../services/profile-service
     ports:
       - "8082:8082"
     depends_on:
       - kafka
   allocator-service:
-    build: ../allocator-service
+    build: ../services/allocator-service
     ports:
       - "8083:8083"
     depends_on:
       - kafka
   notifier-service:
-    build: ../notifier-service
+    build: ../services/notifier-service
     ports:
       - "8084:8084"
     depends_on:
       - kafka
   audit-service:
-    build: ../audit-service
+    build: ../services/audit-service
     ports:
       - "8085:8085"
     depends_on:
