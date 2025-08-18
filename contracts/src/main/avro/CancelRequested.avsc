@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "CancelRequested",
+  "namespace": "io.github.xuzhaorui.matching.contracts.avro",
+  "fields": [
+    {"name": "userId", "type": "string"},
+    {"name": "mode", "type": "string"},
+    {"name": "ts", "type": "long"},
+    {"name": "ticketId", "type": "string"},
+    {"name": "version", "type": "int"}
+  ]
+}

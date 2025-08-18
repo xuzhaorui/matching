@@ -6,14 +6,34 @@ option java_outer_classname = "MatchingProto";
 
 package matching;
 
-service MatchService {
-  rpc Join (MatchRequest) returns (MatchResponse);
+service MatchRpc {
+  rpc Enqueue (Join) returns (Ack);
+  rpc Cancel (Cancel) returns (Ack);
 }
 
-message MatchRequest {
+message Join {
   string userId = 1;
+  string region = 2;
+  int32 score = 3;
+  string mode = 4;
+  int64 ts = 5;
+  string ticketId = 6;
+  int32 version = 7;
 }
 
-message MatchResponse {
+message Cancel {
+  string userId = 1;
+  string mode = 2;
+  int64 ts = 3;
+  string ticketId = 4;
+  int32 version = 5;
+}
+
+message Ack {
   string matchId = 1;
+  repeated string users = 2;
+  string region = 3;
+  string mode = 4;
+  int64 createdAt = 5;
+  int32 version = 6;
 }

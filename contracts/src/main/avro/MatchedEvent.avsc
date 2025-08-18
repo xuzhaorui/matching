@@ -1,0 +1,13 @@
+{
+  "type": "record",
+  "name": "MatchedEvent",
+  "namespace": "io.github.xuzhaorui.matching.contracts.avro",
+  "fields": [
+    {"name": "matchId", "type": "string"},
+    {"name": "users", "type": {"type": "array", "items": "string"}},
+    {"name": "region", "type": "string"},
+    {"name": "mode", "type": "string"},
+    {"name": "createdAt", "type": "long"},
+    {"name": "version", "type": "int"}
+  ]
+}
