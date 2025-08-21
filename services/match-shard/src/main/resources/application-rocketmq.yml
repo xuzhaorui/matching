@@ -1,0 +1,7 @@
+messaging:
+  type: rocketmq
+spring:
+  rocketmq:
+    name-server: ${ROCKETMQ_NAMESRV:localhost:9876}
+topics:
+  sample: sample-topic

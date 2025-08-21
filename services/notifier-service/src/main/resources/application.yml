@@ -1,0 +1,20 @@
+server:
+  port: 8084
+spring:
+  application:
+    name: notifier-service
+  profiles:
+    active: kafka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  tracing:
+    sampling:
+      probability: 1.0
+  metrics:
+    export:
+      prometheus:
+        enabled: true

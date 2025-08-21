@@ -1,0 +1,20 @@
+server:
+  port: 8085
+spring:
+  application:
+    name: audit-service
+  profiles:
+    active: kafka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  tracing:
+    sampling:
+      probability: 1.0
+  metrics:
+    export:
+      prometheus:
+        enabled: true

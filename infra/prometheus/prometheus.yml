@@ -1,0 +1,21 @@
+global:
+  scrape_interval: 15s
+scrape_configs:
+  - job_name: 'gateway-ws'
+    static_configs:
+      - targets: ['gateway-ws:8080']
+  - job_name: 'match-shard'
+    static_configs:
+      - targets: ['match-shard:8081']
+  - job_name: 'profile-service'
+    static_configs:
+      - targets: ['profile-service:8082']
+  - job_name: 'allocator-service'
+    static_configs:
+      - targets: ['allocator-service:8083']
+  - job_name: 'notifier-service'
+    static_configs:
+      - targets: ['notifier-service:8084']
+  - job_name: 'audit-service'
+    static_configs:
+      - targets: ['audit-service:8085']

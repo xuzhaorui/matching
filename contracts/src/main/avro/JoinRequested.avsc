@@ -1,0 +1,14 @@
+{
+  "type": "record",
+  "name": "JoinRequested",
+  "namespace": "io.github.xuzhaorui.matching.contracts.avro",
+  "fields": [
+    {"name": "userId", "type": "string"},
+    {"name": "region", "type": "string"},
+    {"name": "score", "type": "int"},
+    {"name": "mode", "type": "string"},
+    {"name": "ts", "type": "long"},
+    {"name": "ticketId", "type": "string"},
+    {"name": "version", "type": "int"}
+  ]
+}
