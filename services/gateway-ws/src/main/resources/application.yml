@@ -1,3 +1,5 @@
+server:
+  port: 8080
 spring:
   application:
     name: gateway-ws
@@ -16,19 +18,3 @@ management:
     export:
       prometheus:
         enabled: true
-
----
-spring:
-  config:
-    activate:
-      on-profile: kafka
-  kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:9092}
-
----
-spring:
-  config:
-    activate:
-      on-profile: rocketmq
-  rocketmq:
-    name-server: ${ROCKETMQ_NAMESRV:localhost:9876}

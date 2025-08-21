@@ -1,0 +1,7 @@
+messaging:
+  type: kafka
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:9092}
+topics:
+  sample: sample-topic
