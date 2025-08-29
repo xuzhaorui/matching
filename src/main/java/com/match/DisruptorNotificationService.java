@@ -135,7 +135,7 @@ public class DisruptorNotificationService {
             MatchPair p = event.getPair();
             try {
                 if (p.tryNotify()) {
-                    registry.get(p.getChannelA())
+                    Mono<Void> sendA = registry.get(p.getChannelA())
                             .flatMap(ctxA -> {
                                 if (ctxA == null) {
                                     log.warn("ChannelA not found for ID: {}", p.getChannelA());
@@ -154,24 +154,28 @@ public class DisruptorNotificationService {
                             .doOnError(e -> log.error("Failed to process ChannelA", e))
                             .then(); // 忽略结果，仅关注完成信号
 
-                    registry.get(p.getChannelB())
+                    Mono<Void> sendB = registry.get(p.getChannelB())
                             .flatMap(ctxB -> {
                                 if (ctxB == null) {
-                                    log.warn("ChannelA not found for ID: {}", p.getChannelA());
+                                    log.warn("ChannelB not found for ID: {}", p.getChannelB());
                                     // Returning an empty Mono indicates termination, or execution of redirect logic
                                     return Mono.empty(); // 或 return redirectToRetryQueue(pair);
                                 }
 
                                 // 执行写操作并返回结果
                                 return Mono.fromCallable(() -> {
-                                    ChannelFuture fA = ctxB.writeAndFlush(p.getChannelA().getBytes(StandardCharsets.UTF_8));
-                                    fA.syncUninterruptibly();
-                                    return fA;
+                                    ChannelFuture fB = ctxB.writeAndFlush(p.getChannelB().getBytes(StandardCharsets.UTF_8));
+                                    fB.syncUninterruptibly();
+                                    return fB;
                                 }).subscribeOn(Schedulers.boundedElastic());
                             })
-                            .doOnError(e -> log.error("Failed to process ChannelA", e))
+                            .doOnError(e -> log.error("Failed to process ChannelB", e))
                             // Ignore the results and focus only on the completion signal
                             .then();
+
+                    Mono.when(sendA, sendB)
+                            .subscribe(null, err -> log.error("Notification error", err));
+
                     atomicLong.addAndGet(2);
                 }
             } catch (Exception ex) {
